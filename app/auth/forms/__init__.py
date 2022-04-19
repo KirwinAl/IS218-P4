@@ -19,7 +19,7 @@ class register_form(FlaskForm):
     email = EmailField('Email Address', [
         validators.DataRequired(),
 
-    ], description="You need to signup with an email")
+    ], description="You need to signup with a valid email address")
 
     password = PasswordField('Create Password', [
         validators.DataRequired(),

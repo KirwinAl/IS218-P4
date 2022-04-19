@@ -1,6 +1,16 @@
-"""A simple flask web app"""
+"""Bank Transaction - This will hold the base of the app"""
+#OS and Logging
 import os
+import logging
+from logging.handlers import RotationFileHandler
+
+#Flask
+import flask_login
 from flask import Flask
+from flask_bootstrap import Bootstrap5
+from flask_wtf.csrf import CSRFProtect
+
+#App
 from app.cli import create_database
 from app.db import db
 from app.db.models import User
@@ -21,9 +31,7 @@ def create_app():
     db.init_app(app)
     # add command function to cli commands
     app.cli.add_command(create_database)
-
-    @app.route('/')
-    def hello():
-        return 'Hello, World!'
+    #def hello():
+    #    return 'Hello, World!'
 
     return app

@@ -1,9 +1,18 @@
 from datetime import datetime
 
+from sqlalchemy import Integer, ForeignKey
+from sqlalchemy.orm import relationship
 from werkzeug.security import check_password_hash, generate_password_hash
 from app.db import db
 from flask_login import UserMixin
 
+class Transactions(db.Model):
+    __tablename__ = 'transactions'
+    id = db.Column(db.Integer, primary_key = True)
+    purchase = db.Column(db.String(300), unique = False)
+    date = db.Column(db.DateTime, unique = False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = relationship("User", back_populates = "transactions")
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -16,6 +25,7 @@ class User(UserMixin, db.Model):
     registered_on = db.Column('registered_on', db.DateTime)
     active = db.Column('is_active', db.Boolean(), nullable=False, server_default='1')
     is_admin = db.Column('is_admin', db.Boolean(), nullable=False, server_default='0')
+    transactions = db.relationship("Transaction", back_populates = "user", cascade = "all, delete", lazy = True)
 
     # `roles` and `groups` are reserved words that *must* be defined
     # on the `User` model to use group- or role-based authorization.
