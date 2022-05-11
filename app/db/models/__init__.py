@@ -9,10 +9,33 @@ from flask_login import UserMixin
 class Transactions(db.Model):
     __tablename__ = 'transactions'
     id = db.Column(db.Integer, primary_key = True)
-    purchase = db.Column(db.String(300), unique = False)
-    date = db.Column(db.DateTime, unique = False)
+    amount = db.Column(db.Integer, unique = False)
+    type = db.Column(db.String(6), unique = False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = relationship("User", back_populates = "transactions")
+
+    def __init__(self, amount, type):
+        self.amount = amount
+        self.type = type
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.id
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
