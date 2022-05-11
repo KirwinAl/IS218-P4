@@ -11,7 +11,7 @@ from flask_bootstrap import Bootstrap5
 from flask_wtf.csrf import CSRFProtect
 
 #App
-from app.cli import create_database
+from app.cli import create_database,create_upload_folder,create_log_folder
 from app.db import db
 from app.db.models import User
 from app.pnf_error import pnf_error
@@ -55,7 +55,8 @@ def create_app():
     app.register_blueprint(pnf_error)
     # add command function to cli commands
     app.cli.add_command(create_database)
-
+    app.cli.add_command(create_upload_folder)
+    app.cli.add_command(create_log_folder)
     db.init_app(app)
     #def hello():
     #    return 'Hello, World!'
