@@ -14,10 +14,19 @@ from flask_wtf.csrf import CSRFProtect
 from app.cli import create_database
 from app.db import db
 from app.db.models import User
-from app.pnf_error import page_not_found
-
+from app.pnf_error import pnf_error
+from app.simple_pages import simple_pages
+from app.auth import auth
+from app.context_processors import utility_text_processors
 
 login_manager = flask_login.LoginManager()
+
+@login_manager.user_loader
+def user_loader(user_id):
+    try:
+        return User.query.get(int(user_id))
+    except:
+        return None
 
 def create_app():
     """Create and configure an instance of the Flask application."""
@@ -29,11 +38,23 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + os.path.abspath(db_dir)
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+    #Should the very first commands being executed
+    login_manager.init_app(app)
+    login_manager.login_view = "auth.login"
+    csrf = CSRFProtect(app)
+    bootstrap = Bootstrap5(app)
+
+    #Needed for Forms
+    app.context_processor(utility_text_processors)
+
+    #Our Pages with interfaces
+    app.register_blueprint(simple_pages)
+    app.register_blueprint(auth)
+
+    #Pages with Functionality but no interfaces
+    app.register_blueprint(pnf_error)
     # add command function to cli commands
     app.cli.add_command(create_database)
-
-    #These should
-
 
     db.init_app(app)
     #def hello():
