@@ -2,7 +2,7 @@
 #OS and Logging
 import os
 import logging
-from logging.handlers import RotationFileHandler
+from logging.handlers import RotatingFileHandler
 
 #Flask
 import flask_login
@@ -31,6 +31,9 @@ def create_app():
 
     # add command function to cli commands
     app.cli.add_command(create_database)
+
+    #These should
+
 
     db.init_app(app)
     #def hello():
