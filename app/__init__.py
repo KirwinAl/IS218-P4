@@ -13,11 +13,12 @@ from flask_wtf.csrf import CSRFProtect
 #App
 from app.cli import create_database,create_upload_folder,create_log_folder
 from app.db import db
-from app.db.models import User
+from app.db.models import User, Transaction
 from app.pnf_error import pnf_error
 from app.simple_pages import simple_pages
 from app.auth import auth
 from app.context_processors import utility_text_processors
+from app.transactions import transactions
 
 login_manager = flask_login.LoginManager()
 
@@ -50,9 +51,9 @@ def create_app():
     #Our Pages with interfaces
     app.register_blueprint(simple_pages)
     app.register_blueprint(auth)
-
     #Pages with Functionality but no interfaces
     app.register_blueprint(pnf_error)
+    app.register_blueprint(transactions)
     # add command function to cli commands
     app.cli.add_command(create_database)
     app.cli.add_command(create_upload_folder)

@@ -34,6 +34,8 @@
                     <div class="navbar-nav mr-auto">
                         {% if current_user.is_authenticated %}
                             {{ render_nav_item('auth.dashboard','Dashboard' ) }}
+                            {{ render_nav_item('transactions.transaction_upload', 'Upload Your Transactions') }}
+                            {{ render_nav_item('transactions.transaction_browse', 'Your Transactions') }}
                             {% if current_user.is_admin %}
                                 {{ render_nav_item('auth.browse_users','User Management' ) }}
                             {% endif %}
